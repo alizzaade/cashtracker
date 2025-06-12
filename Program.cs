@@ -1,4 +1,6 @@
+using cashTracker.Data;
 using cashTracker.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace cashTracker
@@ -14,6 +16,19 @@ namespace cashTracker
             builder.Services.AddDbContext<CashTrackerDbContext>(options =>
                 options.UseInMemoryDatabase("CashTrackerDb")
             );
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration
+                .GetConnectionString("Default")));
+            builder.Services.AddIdentity<Users, IdentityRole>(options =>
+               {
+                   options.Password.RequiredLength = 8;
+                   options.Password.RequireNonAlphanumeric = false;
+                   options.Password.RequireDigit = true;
+                   options.Password.RequireUppercase = true;
+                   options.User.RequireUniqueEmail = true;
+                   options.SignIn.RequireConfirmedAccount = false;
+                   options.SignIn.RequireConfirmedPhoneNumber = false;
+               }
+            ).AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
             var app = builder.Build();
 
