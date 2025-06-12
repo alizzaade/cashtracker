@@ -2,11 +2,8 @@
 
 namespace cashTracker.ViewModels
 {
-    public class RegisterViewModel
+    public class ChangePasswordViewModel
     {
-        [Required(ErrorMessage = "Name is required!")]
-        public string Name { get; set; }
-
         [Required(ErrorMessage = "Email is required!")]
         [EmailAddress]
         public string Email { get; set; }
@@ -14,12 +11,13 @@ namespace cashTracker.ViewModels
         [Required(ErrorMessage = "Password is required!")]
         [StringLength(64, MinimumLength = 8, ErrorMessage = "Password must be at least {0} and maximum {1} length!")]
         [DataType(DataType.Password)]
-        [Compare("ConfirmPassword", ErrorMessage = "Password does not match!")]
-        public string Password { get; set; }
+        [Compare("ConfirmNewPassword", ErrorMessage = "Password does not match!")]
+        [Display(Name = "New Password")]
+        public string NewPassword { get; set; }
 
         [Required(ErrorMessage = "Confirm Password is required!")]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm Password")]
-        public string ConfirmPassword { get; set; }
+        [Display(Name = "Confirm New Password")]
+        public string ConfirmNewPassword { get; set; }
     }
 }
