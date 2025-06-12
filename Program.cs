@@ -1,3 +1,6 @@
+using cashTracker.Models;
+using Microsoft.EntityFrameworkCore;
+
 namespace cashTracker
 {
     public class Program
@@ -8,6 +11,9 @@ namespace cashTracker
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddDbContext<CashTrackerDbContext>(options =>
+                options.UseInMemoryDatabase("CashTrackerDb")
+            );
 
             var app = builder.Build();
 
