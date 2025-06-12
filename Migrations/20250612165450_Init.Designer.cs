@@ -12,7 +12,7 @@ using cashTracker.Data;
 namespace cashTracker.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250612164110_Init")]
+    [Migration("20250612165450_Init")]
     partial class Init
     {
         /// <inheritdoc />
