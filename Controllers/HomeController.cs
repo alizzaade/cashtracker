@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using cashTracker.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace cashTracker.Controllers
@@ -24,6 +25,8 @@ namespace cashTracker.Controllers
         {
             return View();
         }
+
+        [Authorize]
         public IActionResult Expenses()
         {
             var allExpenses = _context.Expenses.ToList();
