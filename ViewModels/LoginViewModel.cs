@@ -2,7 +2,7 @@
 
 namespace cashTracker.ViewModels
 {
-    public class LoginViewModels
+    public class LoginViewModel
     {
         [Required(ErrorMessage = "Email is required!")]
         [EmailAddress]
