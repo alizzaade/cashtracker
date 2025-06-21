@@ -6,16 +6,10 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace cashTracker.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager) : Controller
     {
-        private readonly SignInManager<Users> signInManager;
-        private readonly UserManager<Users> userManager;
-
-        public AccountController(SignInManager<Users> signInManager, UserManager<Users> userManager)
-        {
-            this.signInManager = signInManager;
-            this.userManager = userManager;
-        }
+        private readonly SignInManager<Users> signInManager = signInManager;
+        private readonly UserManager<Users> userManager = userManager;
 
         public IActionResult Login()
         {
@@ -32,7 +26,8 @@ namespace cashTracker.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
-                } else
+                }
+                else
                 {
                     ModelState.AddModelError("", "Email or password is incorrect!");
                     return View(model);
@@ -50,7 +45,7 @@ namespace cashTracker.Controllers
         {
             if (ModelState.IsValid)
             {
-                Users users = new Users
+                Users users = new()
                 {
                     FullName = model.Name,
                     Email = model.Email,
@@ -61,9 +56,10 @@ namespace cashTracker.Controllers
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Login", "Account");
-                } else
+                }
+                else
                 {
-                    foreach(var error in result.Errors)
+                    foreach (var error in result.Errors)
                     {
                         ModelState.AddModelError("", error.Description);
                     }
@@ -92,7 +88,7 @@ namespace cashTracker.Controllers
                 }
                 else
                 {
-                    return RedirectToAction("ChangePassword", "Account", new {username = user.UserName});
+                    return RedirectToAction("ChangePassword", "Account", new { username = user.UserName });
                 }
             }
             return View(model);

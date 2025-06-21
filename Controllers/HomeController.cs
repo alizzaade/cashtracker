@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using cashTracker.Data;
 using cashTracker.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,9 +9,9 @@ namespace cashTracker.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly CashTrackerDbContext _context;
+        private readonly ApplicationDbContext _context;
 
-        public HomeController(ILogger<HomeController> logger, CashTrackerDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
             _logger = logger;
             _context = context;
@@ -29,17 +30,21 @@ namespace cashTracker.Controllers
         [Authorize]
         public IActionResult Expenses()
         {
-            var allExpenses = _context.Expenses.ToList();
-            var totalExpenses = allExpenses.Sum(x => x.Value);
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+            var userExpenses = _context.Expenses.Where(x => x.UserId == userId).ToList();
+            var totalExpenses = userExpenses.Sum(x => x.Value);
             ViewBag.Expenses = totalExpenses;
-            return View(allExpenses);
+            return View(userExpenses);
         }
 
         public IActionResult CreateEditExpense(int? id)
         {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (id != null)
             {
-                var expenseInDb = _context.Expenses.SingleOrDefault(expense => expense.Id == id);
+                var expenseInDb = _context.Expenses.SingleOrDefault(expense => expense.Id == id && expense.UserId == userId);
+                if (expenseInDb == null)
+                    return Unauthorized();
                 return View(expenseInDb);
             }
 
@@ -56,17 +61,24 @@ namespace cashTracker.Controllers
 
         public IActionResult CreateOrEditExpense(Expense model)
         {
+            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
             if (model.Id == 0)
             {
+                model.UserId = userId;
                 _context.Expenses.Add(model);
             }
             else
             {
-                _context.Expenses.Update(model);
+                var expenseInDb = _context.Expenses.SingleOrDefault(e => e.Id == model.Id && e.UserId == userId);
+                if (expenseInDb == null)
+                    return Unauthorized();
+
+                expenseInDb.Value = model.Value;
+                expenseInDb.Description = model.Description;
             }
 
             _context.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Expenses");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

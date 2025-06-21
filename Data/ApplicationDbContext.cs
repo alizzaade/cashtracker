@@ -4,11 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 namespace cashTracker.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<Users>
+    public class ApplicationDbContext(DbContextOptions options) : IdentityDbContext<Users>(options)
     {
-        public ApplicationDbContext(DbContextOptions options) : base(options)
+        public DbSet<Expense> Expenses { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Expense>()
+                .Property(e => e.Value)
+                .HasPrecision(18, 2);
         }
     }
 }

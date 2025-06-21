@@ -13,9 +13,6 @@ namespace cashTracker
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
-            builder.Services.AddDbContext<CashTrackerDbContext>(options =>
-                options.UseInMemoryDatabase("CashTrackerDb")
-            );
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration
                 .GetConnectionString("Default")));
             builder.Services.AddIdentity<Users, IdentityRole>(options =>
