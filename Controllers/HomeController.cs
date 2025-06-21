@@ -74,7 +74,7 @@ namespace cashTracker.Controllers
                     return Unauthorized();
 
                 expenseInDb.Value = model.Value;
-                expenseInDb.Description = model.Description;
+                expenseInDb.Category = model.Category;
             }
 
             _context.SaveChanges();

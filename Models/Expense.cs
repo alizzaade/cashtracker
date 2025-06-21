@@ -7,7 +7,7 @@ namespace cashTracker.Models
         public int Id { get; set; }
         public decimal Value { get; set; }
         [Required]
-        public string? Description { get; set; }
+        public string? Category { get; set; }
         [Required]
         public string UserId { get; set; }
         public Users User { get; set; }
