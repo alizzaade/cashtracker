@@ -4,15 +4,32 @@
 
 @model cashTracker.Models.Expense
 
-<div class="text-center">
-    <h1 class="display-4">Create or Edit an expense</h1>
+<div class="container py-5" style="max-width: 480px;">
+    <h1 class="display-5 text-center mb-4 text-primary">
+        Create or Edit an Expense
+    </h1>
+
+    <form asp-action="CreateOrEditExpense" asp-controller="Home" novalidate>
+        <input asp-for="Id" type="hidden" />
+
+        <div class="mb-3">
+            <label asp-for="Value" class="form-label fw-semibold">Value ($)</label>
+            <input asp-for="Value" class="form-control" type="number" min="0" step="0.01" placeholder="Enter amount" />
+            <span asp-validation-for="Value" class="text-danger small"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="Category" class="form-label fw-semibold">Category</label>
+            <input asp-for="Category" class="form-control" placeholder="e.g., Food, Transport" />
+            <span asp-validation-for="Category" class="text-danger small"></span>
+        </div>
+
+        <button type="submit" class="btn btn-lg btn-primary w-100 mt-4">
+            💾 Save Expense
+        </button>
+    </form>
 </div>
 
-<form asp-action="CreateOrEditExpense" asp-controller="Home">
-    <input hidden class="form-control" type="number" placeholder="0" min="0" asp-for="Id" />
-    <label class="mt-4">Value</label>
-    <input class="form-control" type="number" placeholder="0" min="0" asp-for="Value" step="0.01" />
-    <label class="mt-4">Category</label>
-    <input class="form-control" type="text" asp-for="Category" />
-    <button class="btn btn-primary mt-4" type="submit">Save</button>
-</form>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

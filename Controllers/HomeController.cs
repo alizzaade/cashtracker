@@ -22,11 +22,6 @@ namespace cashTracker.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
         [Authorize]
         public IActionResult Expenses()
         {

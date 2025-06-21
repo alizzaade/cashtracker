@@ -4,33 +4,37 @@
 
 @model List<Expense>
 
-<div class="text-center">
-    <h1 class="display-4">Expenses</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Value</th>
-                <th>Category</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @{
-                foreach (var expense in Model)
+<div class="container py-5">
+    <h1 class="text-center display-5 mb-4 text-primary">Your Expenses</h1>
+
+    <div class="table-responsive shadow rounded">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Value ($)</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var expense in Model)
                 {
                     <tr>
-                    <td>@expense.Id</td>
-                    <td>@expense.Value</td>
-                    <td>@expense.Category</td>
-                    <td>
-                            <a asp-action="CreateEditExpense" asp-route-id="@expense.Id" class="text-decoration-none">Edit</a>
-                            <a asp-action="DeleteExpense" asp-route-id="@expense.Id" class="text-decoration-none">Delete</a>
-                    </td>
+                        <td>@expense.Id</td>
+                        <td class="fw-semibold text-success">$@expense.Value</td>
+                        <td>@expense.Category</td>
+                        <td>
+                            <a asp-action="CreateEditExpense" asp-route-id="@expense.Id" class="btn btn-sm btn-outline-primary me-2">✏️ Edit</a>
+                            <a asp-action="DeleteExpense" asp-route-id="@expense.Id" class="btn btn-sm btn-outline-danger">🗑️ Delete</a>
+                        </td>
                     </tr>
                 }
-            }
-        </tbody>
-    </table>
-    <h3>Total expenses $@ViewBag.Expenses</h3>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="text-end mt-4">
+        <h4 class="fw-bold text-secondary">Total Expenses: <span class="text-danger">$@ViewBag.Expenses</span></h4>
+    </div>
 </div>
